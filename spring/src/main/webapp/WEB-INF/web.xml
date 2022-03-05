@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<!-- web.xml : WAS 실행시 프로젝트의 자원을 컨텍스트로 생성하기 위한 정보를 제공하는 파일 -->
+	
+		<!-- 
+			(Servers에 web.xml등 configuration 파일들 존재)
+			WAS(Apache Tomcat)가 실행될 때 프로젝트를 Context로 convert할 때 필요한 정보들을 web.xml가 제공한다. 
+			web.xml에서 제일 먼저 읽어들이는 것은 listener고 listener에 등록된 클래스를 객체로 생성한다.
+			> listener class 를 읽어 들인다.
+			
+			WebApplicationContext를 미리 만들어줌.
+			Spring Container가 생성된 후 Servlet이 생성됨.
+		-->
+
+	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
+	<!-- context-param : 컨텍스트에 존재하는 모든 클래스에 값을 제공하기 위한 엘리먼트 -->
+		<!-- Context에 존재하는 모든 클래스가 사용가능 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
+		<!-- 사용법은 servlet 프로젝트의  xyz.itwill.servlet.LifeCycleServlet.java  참고 -->
+	
+	
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<!-- listener : WAS 실행시 Listener 클래스를 객체로 생성하기 위한 엘리먼트 -->
+	<!-- Listener 클래스 : ServletContextListener 인터페이스를 상속받은 클래스 -->
+	<!-- => 컨텍스트의 모든 클래스(웹프로그램)에서 사용할 수 있는 객체를 제공하기 위한 클래스 -->
+	<!-- => contextInitialized() 메소드 : Listener 객체 생성 후 자동으로 호출되는 메소드 - 초기화 작업 -->
+	<!-- => contextDestroyed() 메소드 : Listener 객체 소멸 전 자동으로 호출되는 메소드 - 마무리 작업 -->
+		<!-- 프로그램에 필요한 객체를 미리 만들어주는 역할을 수행한다. -->
+	<listener>
+		<!-- listener-class : Listener 클래스를 설정하기 위한 엘리먼트 -->
+		<!-- ContextLoaderListener : WebApplicationContext 객체(Spring Container)를 생성하고
+		Bean Configuration File에 Spring Bean으로 등록된 모든 클래스를 객체로 생성하여
+		컨텍스트에 작성된 모든 클래스에서 사용할 수 있도록 제공하는 Listener 클래스  -->
+		<!-- => context-param 엘리먼트로 제공되는 값이 Bean Configuration File로 처리 -->
+			<!-- WebApplicationContext는 웹(Spring MVC)에서만 사용할 수 있는 Spring Container이다. -->
+			<!-- WebApplicationContext != ApplicationContext -->
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+		<!-- Spring MVC는 Container를 직접 만드는 것이 아니라 web.xml파일의 설정을 통해 WAS가 실행될 떄 자동으로 생성되도록 설정하는 것이다. -->
+		<!-- ContextLoaderListener, DispatcherServlet 소스 읽어보기 -->
+
+	<!-- filter : 필터 클래스를 필터로 등록하는 엘리먼트 -->
+	<!-- Filter 클래스 : 웹프로그램 실행 전후에 동작될 명령을 제공하는 클래스 -->
+	<!-- CharacterEncodingFilter : Spring Framework에서 제공하는 필터 클래스 중 하나로 요청 
+	처리 전 리퀘스트 메세지의 캐릭터셋을 변경하는 클래스 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+
+	<!-- filter-mapping : 필터가 적용되기 위한 URL 주소의 패턴을 설정하는 엘리먼트 -->
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+			<!-- 어떤 프로그램을 요청하더라도 인코딩필터가 동작되도록 설정. -->
+	</filter-mapping>
+	
+		<!-- Spring MVC에서는 Encoding Filter 클래스 설정은 필수 -->
+
+	<!-- Processes application requests -->
+	<!-- servlet : 클래스를 서블릿(웹프로그램)으로 등록하는 엘리먼트 -->
+	<!-- => DispatcherServlet 클래스(Front Controller)를 웹프로그램으로 등록되도록 설정 -->
+	<!-- => servlet 엘리먼트를 이용하여 Front Controller 역할의 웹프로그램을 여러개 등록 가능 -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<!-- DispatcherServlet  : 클라이언트의 모든 요청을 처리하기 위해 Spring Framework에서
+		제공하는 Front Controller 클래스 -->
+		<!-- => init-param 엘리먼트로 제공되는 값이 Bean Configuration File로 처리 -->
+			<!-- 객체가 생성될 때 init() 메소드를 통해 초기화 작업을 수행 -->
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- init-param : 서블릿 클래스에 필요한 값을 제공하기 위한 엘리먼트 -->
+		<!-- => Bean Configuration File에 Spring Bean으로 등록된 모든 클래스를 객체로 생성하여
+		서블릿(DispatcherServlet)에서만 제공되어 사용 -->
+		<init-param>
+				<!-- DispatcherServlet은 init 메소드를 통해 기존에 생성된 WebApplicationContext를 제공받아
+				contextConfigLocation을 다시 설정할 수 있다. -->
+			<param-name>contextConfigLocation</param-name>
+			<!-- param-value 엘리먼트에 Bean Configuration File을 여러개 등록 가능  -->
+			<!-- => 파일을 엔터 또는 [,] 또는 [;]으로 구분하여 설정 -->
+			<!-- => Annotation 기반의 Bean Configuration File은 하나만 설정 가능 -->
+				<!-- Annotation을 위한 Bean Configuration File은 여러개일 필요가 없다. -->
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+		</init-param>
+			<!-- mvc 프로젝트의 xyz.itwill.mvc.ControllerServlet.java 참고 -->
+			<!-- root-context.xml을 읽어들인 뒤 servlet-context.xml을 읽는다. -->
+		
+		<!-- load-on-startup : WAS 실행시 서블릿 클래스를 객체로 생성하기 위한 엘리먼트 -->
+		<!-- => 클라이언트의 요청 없이 WAS 실행시 미리 서블릿 클래스를 객체로 생성하기 위해 사용 -->
+		<!-- => 엘리먼트의 값은 0보다 큰 정수값을 사용하며 값이 작을수록 먼저 객체로 생성 -->
+			<!-- 원래 웹프로그램은 클라이언트가 요청해야 객체를 생성한다. -->
+		<load-on-startup>2</load-on-startup>
+			<!-- load-on-startup 클라이언트가 요청하지 않아도 WAS가 실행될 때 서블릿 클래스를 객체로 생성하도록 설정하는 엘리먼트 -->
+	</servlet>
+	
+	<!-- servlet-mapping : 서블릿(웹프로그램)을 실행하기 위한 URL 패턴을 매핑 설정하는 엘리먼트 -->	
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<!-- 클라이언트의 모든 요청(/)에 대해 서블릿이 실행되도록 설정 -->
+		<url-pattern>/</url-pattern>
+			<!-- 일반적으로 확장자 없이 요청했을 때 사용하는 url-pattern -->
+	</servlet-mapping>
+
+		<!--
+			위의 기본 셋팅은 어노테이션 기반이다. - 모든것을 어노테이션으로 생성해야한다.
+			프론트 컨트롤러는 하나만 존재하지 않는다. - 여러개 생성 가능
+			위의 어노테이션 방식이 더 많이 사용된다. (정석)
+			
+			아래는 예전에 사용되는 Spring MVC 방식
+			
+			[학습순서]
+			1. xml 사용방식(과거 - 전통적 방식(convention) : 굉장히 불편) > 2. 어노테이션 사용방식(정석)
+		-->
+	
+	<!--  
+	<servlet>
+		<servlet-name>mvcServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+				/WEB-INF/spring/mvcServlet/mvc-context1.xml
+				/WEB-INF/spring/mvcServlet/mvc-context2.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>mvcServlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	-->
+
+
+		<!-- 
+			load-on-startup 숫자를 통해 생성순서 조절 .do로 끝나면 아래  
+			context-param > 모든 클래스
+			init-param > 선언된 위치의 서블릿한테만 제공
+			servlet으로 등록되는 모든 클래스들은 front controller라고 볼 수 있을 것이다.
+			
+			설정한 경로의 파일이 존재해야한다.
+			
+			bean Configuration 오류 or 해당 jsp가 없을 경우 에러가 발생하여 서버 실행이 안된다. - 서버자체가 실행안됨.
+			
+			INFO log를 확인하면 WebApplicationContext와 Servlet Initialization 정보를 확인할 수 있다.
+			
+		-->	
+</web-app>

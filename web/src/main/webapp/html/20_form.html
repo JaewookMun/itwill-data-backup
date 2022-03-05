@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>HTML</title>
+</head>
+<body>
+	<h1>form 태그</h1>
+	<hr>
+		<!-- 
+			An HTML form is used to collect user input. The user input is most often sent to a server for processing.
+			사용자에게 서버에서 처리하기 위한 정보를 입력받기 위해 사용된다.   
+		 -->
+	<!-- form 태그 : 사용자로부터 값을 입력받아 웹프로그램을 요청하여 입력값을 전달 -->
+	<!-- => 하위태그로 입력태그와 요청 전송 기능(Submit Event)을 제공하는 태그를 반드시 작성 -->
+	<!-- action 속성 : 요청 웹프로그램(Servlet 또는 JSP)의 URL 주소를 속성값으로 설정 -->
+	<!-- => action 속성이 생략된 경우 브라우저 주소창의 현재 URL 주소로 웹프로그램 재요청 -->
+	<!-- method 속성 : GET(기본) 또는 POST 중 하나를 속성값으로 설정 - 요청방식 -->
+	<!-- => GET : 입력값을 URL 주소의 QueryString으로 전달 - 소용량의 보안이 필요없는 값 -->
+	<!-- => POST : 입력값을 리퀘스트 메세지의 바디(BODY)에 저장하여 전달 - 대용량 또는 보안이 필요한 값 -->
+	<!-- enctype 속성 : 입력값을 전달하는 형태를 속성값으로 설정 -->
+	<!-- => application/x-www-form-urlencoded (기본) : 입력값을 인코딩 처리된 문자 데이터로 전달 (2byte) -->
+	<!-- => multipart/form-data : 입력값을 원시 데이터로 전달 (1byte) - 파일을 입력받아 전송할 경우 사용 -->
+	<!-- name 속성 : 태그의 이름을 속성값으로 설정 - JavaScript 객체로 표현 -->
+	
+		<!-- @!@!@!@!@!@!@!@!@!@! 매우 중요 @!@!@!@!@!@!@!@!@!@! -->
+		<!-- a 태그가 단순히 링크태그로 연결할 수 있다면 form태그는 입력받아 전달 가능. -->	
+		<!-- 입력태그와 전송태그가 둘다 있어야 함. 하나라도 부재하면 정상적으로 작동하지 않음. -->
+		<!-- 여기서는 action.html파일을 사용했기 때문에 servlet, jsp 결과값은 받아올 수 없다. -->
+		<!-- 속성값 역시 속성처럼 대소문자를 구분하지 않는다. -->
+		<!-- QueryString을 통해 값을 전달 > 눈에 보인다는 의미 -->
+		<!-- URL주소는 브라우저에 계속 기록됨. id&pd를 GET으로 요청하면 보안상 위험. -->
+		<!-- enctype은 문자전송이 기본이기 때문에 생략해도 상관 없음. 파일입력시 설정 -->
+		
+		<!-- action 속성의 속성값으로 설정된 URL주소를 submit 이벤트를 통해 요청. -->
+	<form action="20_action.html" method="post" name="loginForm" >
+		<!-- 입력태그 : input, select, textarea 등 - 1개 이상 -->
+			<!-- 인라인레벨 -->
+		아이디 : <input type="text" name="id"><br>
+		비밀번호 : <input type="password" name="passwd"><br>
+		<!-- 요청 전송 기능(Submit Event)을 제공하는 태그 : input, button, img 등 - 1개 -->
+		
+		<!-- form 태그는 get방식보단는 post방식을 사용하기 위해 주로 이용 - 눈에 보이지 않게 전달 -->
+		<button type="submit">로그인</button>
+	</form>
+</body>
+</html>

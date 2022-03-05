@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>JavaScript</title>
+</head>
+<body>
+	<h1>내부함수(Inner Function)</h1>
+	<hr>
+	<p>함수 내부에 선언된 함수 - 선언된 함수 내부에서만 호출 가능</p>
+	
+	<script type="text/javascript">
+		/*
+		function display(){
+			alert("display 함수 호출-1");
+		}
+		
+		display();
+		
+		// 동일한 이름의 함수 선언 - 기존 함수 덮어씌우기(OverWrite)
+			// 마지막에 사용한 함수가 모든 걸 다 덮어쓴다.
+		function display(){
+			alert("display 함수 호출-2");
+		}
+		*/
+			// 직접 모든 것을 다 만드는 것을 바닐라 Java Script라고 한다.
+			
+		function outer() {
+			// 내부함수 - 동일한 이름의 함수로 덮어씌우기 선언하지 못하도록 함수 선언
+			function display(){
+				alert("display 함수 호출-1")
+			}
+			
+			//내부함수는 선언된 함수에서만 호출 가능
+			display();
+		}
+		
+		//outer();
+		display();
+		
+		function display(){
+			alert("display 함수 호출-2");
+		}
+		
+			//print()는 JS 내부적으로 존재하는 함수 chrome에서 인쇄를 의미
+	</script>
+</body>
+</html>

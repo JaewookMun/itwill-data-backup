@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.itwill.mapper.MyUserMapper">
+	<!-- MyUserMapper 인터페이스를 생성하면 바인딩 처리된다. -->
+	<insert id="insertUser" parameterType="MyUser">
+		insert into myuser values(#{userId}, #{userName})
+	</insert>
+		<!-- 위 #{}에는 필드명 표기 -->
+	
+	<!-- 문제점 : 검색행의 컬럼명과 DTO 클래스의 필드명이 모두 다르면 검색행의 컬럼값이
+	DTO 클래스의 필드에 하나도 저장되지 않아 인스턴스를 생성하지 않고 NULL 반환 -->
+		<!-- 컬럼명 - Snake Case / DTO 필드 - Camel Case -->
+		<!-- 컬럼명과 필드명이 모두 같아야 자동매핑처리됨 - @@@@@ -->
+		<!-- insert 할 때는 문제가 생기지 않지만 select 할 때 문제가 생김 -->
+	<!--  	
+	<select id="selectUserList" resultType="MyUser">
+		select * from myuser order by user_id
+	</select>
+	-->
+	
+	<!-- 해결방법-1 : 검색행의 컬럼명을 DTO 클래스의 필드명과 동일한 이름으로 검색 -->
+	<!-- => SELECT 명령에서 검색대상에 별칭(Column Alias)을 설정하여 검색 -->
+		<!-- 컬럼의 이름을 필드와 똑같이 출력되도록 작성 -->
+	<!--  
+	<select id="selectUserList" resultType="MyUser">
+		select user_id userId, user_name userName from myuser order by user_id
+	</select>
+	-->
+		<!-- 자바에서는 스네이크 표기법은 상수표현을 할때만 사용, 필드에 스네이크 표기법을 쓰는 것은 권장하지 않음. -->
+		
+	<!-- sql : SQL 명령을 구성하는 일부분의 문장을 등록하기 위한 엘리먼트 -->	
+	<sql id="selectColumn">
+		user_id userId, user_name userName
+	</sql>
+		<!-- 자주 사용하는 sql문이 있을 때 사용할 수 있다. -->
+	
+	<!-- include : sql 엘리먼트에 등록된 SQL 문장을 포함시키는 엘리먼트 -->
+	<!-- refid 속성 : 포함시킬 SQL 문장이 등록된 sql 엘리먼트의 식별자를 속성값으로 설정 -->
+	<!--  
+	<select id="selectUserList" resultType="MyUser">
+		select <include refid="selectColumn"/> from myuser order by user_id
+	</select>
+	-->
+	
+	<!-- 해결방법-2 : mybatis 환경설정파일(mybatis-config.xml)의 setting 엘리먼트로 
+	[mapUnderscoreToCamelCase] 옵션값을 [true]로 변경 -->
+	<!-- mapUnderscoreToCamelCase 옵션 : mybatis 실행시 검색행의 스네이크 표기법의 식별자를 
+	자동으로 카멜 표기법의 식별자로 변환하는 기능을 제공하는 옵션 - 기본값 : false(비활성) -->
+	<!--  
+	<select id="selectUserList" resultType="MyUser">
+		select * from myuser order by user_id
+	</select>
+	-->
+	
+	<!-- 해결방법-3 : 매핑정보를 제공하는 resultMap 엘리먼트 이용 -->
+	<!-- resultMap : 검색행의 컬럼값을 클래스의 필드에 매핑되어 저장되도록 설정하는 상위 엘리먼트 -->
+	<!-- type 속성 : 검색행의 컬럼값을 저장하기 위한 필드가 선언된 DTO 클래스를 속성값으로 설정 -->  
+	<!-- => 클래스 대신 별칭 사용 가능 -->
+		<!-- 자동매핑하는 것이 아니라 수동매핑처리한다. -->
+	<resultMap type="MyUser" id="myUserResultMap">
+		<!-- id : 검색행의 컬럼값을 클래스의 필드값으로 매핑하기 위한 정보를 설정하는 엘리먼트 -->
+		<!-- => PK 제약조건이 부여된 컬럼값을 매핑할 때 사용 -->
+		<!-- column 속성 : 검색행의 컬럼값이 저장된 컬럼명을 속성값으로 설정 -->
+		<!-- property 속성 : 검생행의 컬럼값이 저장될 클래스의 필드명을 속성값으로 설정 -->
+		<id column="user_id" property="userId"/>
+		<!-- result : 검색행의 컬럼값을 클래스의 필드값으로 매핑하기 위한 정보를 설정하는 엘리먼트 -->
+		<result column="user_name" property="userName"/>
+	</resultMap>
+	
+	<!-- resultMap 속성 : 매핑정보가 저장된 resultMap 엘리먼트의 식별자를 속성값으로 설정 -->
+	<select id="selectUserList" resultMap="myUserResultMap">
+		select * from myuser order by user_id
+	</select>
+	
+		<!-- 
+			resultType은 자동매핑을 이용할 때 사용하며 resultMap은 수동매핑할 때 사용 
+			resultMap은 mybatis의 강점 중 하나인 join을 사용할 때 매우 효과적이다.
+			
+			하나의 테이블에서 가져올 때는 자동매핑처리하는 것이 좋으나 join을 사용할 땐
+			매핑정보를 설정하여 resultMap을 활용해야 한다.
+			-> select 명령이 단순할 땐 자동매핑 / 복잡하면 수동매핑(resultMap)
+		-->
+	
+</mapper>

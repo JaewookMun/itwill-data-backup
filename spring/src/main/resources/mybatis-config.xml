@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="callSettersOnNulls" value="true"/>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+</configuration>
+
+	<!-- settings 정도만 작성하고 다른 필요한 셋팅사항은 스프링에서 설정한다. -->

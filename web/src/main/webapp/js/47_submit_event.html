@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JavaScript</title>
+</head>
+<body>
+	<h1>Submit Event - 입력페이지</h1>
+	<hr>
+	<form action="47_submit_action.html" method="post" name="loginForm">
+		<table>
+			<tr>
+				<td>아이디</td>
+				<td><input type="text" name="id"></td>
+			</tr>		
+			<tr>
+				<td>비밀번호</td>
+				<td><input type="password" name="passwd"></td>
+			</tr>		
+			<tr>
+				<td colspan="2">
+					<button type="submit">로그인</button>
+				</td>
+			</tr>		
+		</table>
+	</form>
+	
+	<script type="text/javascript">
+		loginForm.id.focus();
+		
+		// FormElement.onsubmit : form 태그에서 submit 이벤트가 발생된 경우 이벤트 처리 함수를
+		// 저장(등록)하기 위한 이벤트 속성 - form 태그 동작전에 실행될 명령 작성 : 입력값 검증
+			//submit 이벤트를 발생시키고 submit 이벤트가 발생된다면 함수를 통해 검증하는 방식
+		loginForm.onsubmit=function(){
+			if(loginForm.id.value==""){ // 입력태그의 입력값이 없는 경우
+				alert("아이디를 반드시 입력해 주세요.");
+				loginForm.id.focus();
+				/*
+				event.preventDefault(); // 기본 이벤트 제거 - submit 이벤트 취소
+				return; // 이벤트 처리 함수 종료
+					// return하기 전에 submit event를 취소해야함. - 처리페이지로 넘어가지 않기 위해서
+				*/
+				
+				// 이벤트 처리 함수에서 false를 반환하면 기본 이벤트 제거와 이벤트 전달을
+				// 중지하는 기능과 동일한 효과 제공
+				return false; // submit 이벤트를 취소하며 이벤트 처리 함수 종료
+			}
+		// `이벤트를 제거하는 것보다 return false;를 사용하는 것이 더 효율적이다. 
+		// `일반함수의 return false와 다르다. - 이벤트와 관련된 모든 기능들을 취소하라는 의미
+			
+			var idReg=/^[a-zA-Z]\w{5,19}/g; 
+
+			if(!idReg.test(loginForm.id.value)){
+				alert("아이디를 형식에 맞게 입력해 주세요");
+				loginForm.id.focus();
+				return false;
+			}
+			
+			if(loginForm.passwd.value==""){ 
+				alert("비밀번호를 반드시 입력해 주세요.");
+				loginForm.passwd.focus();
+				return false;
+			}
+			
+		}
+		
+		// `사용자한테 입력을 받을 때는 입력값에 대한 검증이 중요 @@
+		// `submit 을 처음에할지 나중에할지 결정하는 차이
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+</head>
+<body>
+	<h1>datalist 태그</h1>
+	<hr>
+	<!-- datalist 태그 : input 태그에 입력값을 제공 - 하위태그 : option -->
+	<form action="#" method="post">
+		<label for="subject">좋아하는 과목</label>
+		<!-- list 속성 : datalist 태그의 식별자를 속성값으로 설정 -->
+		<input type="text" name="subject" id="subject" list="subject_list">
+		
+		<datalist id="subject_list">
+			<option>JAVA</option>
+			<option>JSP</option>
+			<option>SPRING</option>
+		</datalist>
+			<!-- select와 달리 list에 없는 값을 입력해도 괜찮다. -->
+		<button type="submit">입력완료</button>
+	</form>
+		<!-- 입력페이지(입력 기능을 사용)에서 대부분 form태그를 사용한다. -->
+		<!-- a, form, 입력태그, submit이벤트. -->
+		<!-- 입력  <form 태그>  처리 - 출력 페이지 -->
+</body>
+</html>

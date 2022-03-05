@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- WAS 실행시 인스턴스 생성에 필요한 정보에 이름을 부여하여 제공하는 파일 -->
+<!-- JNDI(Java Naming Directory Interface) : Java 자원(인스턴스) 생성에 필요한 이름을 설정하는 기술 -->
+	<!-- JNDI는 META-INF 폴더 아래에 존재해야한다. -->
+	<!-- 클라이언트가 접근할 수 없지만 웹에 필요한 정보는 WEB-INF or META-INF에 저장한다. -->
+<Context>
+	<!-- Resource : 인스턴스 생성에 필요한 정보를 속성과 속성값으로 제공하는 엘리먼트 -->
+	<!-- name 속성 : 인스턴스 생성에 필요한 정보의 식별자를 속성값으로 설정 -->
+	<!-- auth 속성 : 인스턴스를 관리하기 위한 사용자를 속성값으로 설정 -->
+	<!-- type 속성 : 식별자로 생산되는 인스턴스의 자료형(클래스 또는 인터페이스)을 속성값으로 설정 -->
+	<!-- factory 속성 : 인스턴스를 생성하는 Factory 클래스를 속성값으로 설정 -->
+	<!-- 기타 속성 : 인스턴스 생성에 필요한 정보를 속성(필드)과 속성값(필드값)으로 설정 -->
+		<!-- 이름은 정해진 것이 아님 e.g. jdbc/orcle > jdbc -->
+		<!-- jdbc/oracle라는 이름으로 인스턴스를 만들것인데 이 인스턴스의 자료형은 ~ DataSource이다. -->
+	<Resource name="jdbc/oracle" auth="Container" type="javax.sql.DataSource"
+		factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"
+		driverClassName="oracle.jdbc.driver.OracleDriver"
+		url="jdbc:oracle:thin:@localhost:1521:xe" username="scott" password="tiger"
+		initialSize="10" maxIdle="10" maxTotal="15"/>
+			<!-- 태그내부에서 닫아도 된다. <Resource ~ /> -->
+			<!-- WAS가 시작될 떄 jdbc/oracle이름으로 위의 정보를 저장한다. -->
+			<!-- name 속성에 jdbc/oracle에서 jdbc는 구분하기 위해 적어준 것이다.
+			auth 역시 아무거나 표기해도 상관 없다. 
+			name, auth는 속성값을 아무거나 해도 상관없음.
+			
+			factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"
+			대신 class=" '' " 로 표기해도 되지만 factory클래스가 있으면 팩토리로 기술
+			
+			factory 클래스가 만들어서 위의 data type으로 저장된다.
+			
+			기타속성은 factory의 속성값에 따라 달라짐. DataSource factory 클래스를 등록했기 때문에
+			connection에 필요한 속성 및 속성값 설정
+			-->
+</Context>

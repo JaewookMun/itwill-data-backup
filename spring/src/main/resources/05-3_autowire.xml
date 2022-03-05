@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- StudentDAO 인터페이스를 상속받은 자식클래스를 Spring Bean으로 등록 -->
+	<!-- <bean class="xyz.itwill05.di.StudentJdbcDAO" id="studentDAO"/> -->
+	<bean class="xyz.itwill05.di.StudentMybatisDAO" id="studentMybatisDAO"/>
+	
+	<!-- StudentService 인터페이스를 상속받은 자식클래스를 Spring Bean으로 등록 -->
+	<!-- StudentServiceImpl 클래스의 studentDAO 필드에 StudentDAO 인터페이스를 상속받은
+	자식클래스의 Spring Bean 객체가 저장되도록 설정 - 의존성 주입(DI - Dependency Injection) -->
+	<!-- => property 엘리먼트를 이용하여 Setter 메소드를 호출해 수동으로 DI 구현 -->
+	<!-- => DI 설정을 하지 않으면 StudentServiceImpl 클래스의 메소드를 호출할 경우 NullPoninterException 발생 -->
+	<!--  
+	<bean class="xyz.itwill05.di.StudentServiceImpl" id="studentService">
+		<property name="studentDAO" ref="studentDAO"/>
+	</bean>
+	-->
+
+	<!-- autowire 속성 : no(기본), byName, byType, constructor 중 하나를 속성값으로 설정 -->
+	<!-- => 의존관계를 Spring Container가 자동으로 구현하기 위한 기능을 제공하는 속성 -->	
+	<!-- no 속성값 : 자동으로 의존관계를 설정하는 기능을 미구현 - 기본 -->
+	<!--  
+	<bean class="xyz.itwill05.di.StudentServiceImpl" id="studentService" autowire="no">
+		<property name="studentDAO" ref="studentDAO"/>
+	</bean>	
+	-->
+	
+	<!-- autowire 속성의 byName 속성값 : 필드명과 동일한 beanName의 Spring Bean 객체를
+	이용하여 Spring Container가 자동으로 의존관계 설정 - Setter Injection -->
+	<!-- 필드명과 동일한 beanName이 존재하지 않을 경우 자동으로 의존관계 설정 미구현 - NullPointerException -->
+		<!-- 필드의 이름과 같은 이름을 가진 Spring Bean이 없으면 의존관계가 구현되지 않는다. -->
+	<!-- <bean class="xyz.itwill05.di.StudentServiceImpl" id="studentService" autowire="byName"/> -->
+	
+	<!-- autowire 속성의 byType 속성값 : 필드의 자료형과 같은 자료형의 Spring Bean 객체를
+	이용하여 Spring Container가 자동으로 의존관계 설정 - Setter Injection -->
+	<!-- => 필드의 자료형이 인터페이스인 경우 자식 클래스의 Spring Bean 객체로 의존관계가 자동 설정 -->
+	<!-- 필드의 자료형이 인터페이스인 경우 자식 클래스의 Spring Bean 객체가 여러개 등록되어
+	있으면 의존관계 설정 시 NoUniqueBeanDefinitionException 예외 발생 -->
+		<!-- 같은 자료형의 Spring Bean 객체가 두개 이상인 경우 에외 발생 -->
+	<!-- <bean class="xyz.itwill05.di.StudentServiceImpl" id="studentService" autowire="byType"/> -->
+
+	<!-- autowire 속성의 constructor 속성값 : 필드의 자료형과 같은 자료형의 Spring Bean 객체를
+	이용하여 Spring Container가 자동으로 의존관계 설정 - Constructor Injection -->
+	<!-- => 의존관계를 설정하기 위한 매개변수가 있는 생성자를 반드시 선언 -->
+	<!-- => 필드의 자료형이 인터페이스인 경우 자식 클래스의 Spring Bean 객체로 의존관계가 자동 설정 -->
+	<!-- 필드의 자료형이 인터페이스인 경우 자식 클래스의 Spring Bean 객체가 여러개 등록되어
+	있으면 의존관계 설정 미구현 - NullPoninterException -->
+		<!-- 기본생성자만 있으면 자동설정 불가능 -->
+	<bean class="xyz.itwill05.di.StudentServiceImpl" id="studentService" autowire="constructor"/>
+		<!-- byType처럼 NoUniqueBean~Exception이 발생하지는 않는다.
+		필드의 초기화가 안되고 필드를 사용하는 메소드를 호출하지 못하는 것으로 나온다. (byType은 container 초기화시 Exception 발생)-->
+	
+		<!-- autowire를 자동 인젝션의 경우 불확실성이 존재하기 때문에 잘 사용하지 않는다. - 수동으로 더 많이 사용 -->
+		<!-- bean 엘리먼트를 사용하면 수동으로 DI하는 것을 권장 -->
+</beans>

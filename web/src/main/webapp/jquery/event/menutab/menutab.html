@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>event</title>
+<style type="text/css">
+	#menuTab {
+		list-style-type: none;
+	}
+	
+	#menuTab li {
+		width: 96px;
+		height: 44px;
+		background-position-y:0;
+		overflow: hidden;
+		display: inline-table; 
+	}
+	
+	#menuTab li:hover {
+		background-position-y:-44px;
+	}
+	
+	#menuTab li.select {
+		background-position-y:-88px;
+		height: 80px;
+	}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+		// 박스모델의 이미지를 변형시켜서 변화효과를 적용 .> 44px or 88px 이동
+	$(document).ready(function() {		
+		$("#menuTab li").each(function(i){
+			$(this).css("background-image", "url('menutab"+i+".png')");
+		});
+
+		$("#menuTab li").click(function(i){
+			$("#menuTab li").removeClass("select");
+			$(this).addClass("select");
+		});
+	});	
+	
+	
+</script>
+</head>
+<body>
+	<h1>메뉴탭</h1>
+	<hr>
+	<ul id="menuTab">
+		<li id="menuItem1">&nbsp;</li>	
+		<li id="menuItem2">&nbsp;</li>	
+		<li id="menuItem3">&nbsp;</li>	
+		<li id="menuItem4">&nbsp;</li>	
+		<li id="menuItem5">&nbsp;</li>	
+		<li id="menuItem6">&nbsp;</li>	
+	</ul>
+</body>
+</html>

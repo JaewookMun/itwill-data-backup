@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JavaScript</title>
+</head>
+<body>
+	<h1>BOM(Browser Object Model) - document 객체</h1>
+	<hr>
+	<p>document 객체 - 응답결과를 출력하는 브라우저 영역을 객체로 표현하여 프로퍼티와 메소드를 제공하는 객체</p>
+		<!-- 눈에 보이는것 창 전체 - window / 주소표시줄 - location / 내용이 출력되는 곳(응답영역) - document -->
+		<!-- 태그들은 css에서 엘리먼트로 불리고 JS에서는 엘리먼트객체라고 표현 -->
+		<!-- Document 인터페이스는 브라우저가 불러온 웹 페이지를 나타내며, 
+		     페이지 콘텐츠(DOM 트리)의 진입점 역할을 수행 MDN -->
+		
+		<script type="text/javascript">
+			// document 객체는 태그를 엘리먼트 객체(Element Object)로 표현하여 처리
+			// => DOM(Document Object Model)
+			// => 이벤트가 발생될 경우 엘리먼트 객체를 조작하여 동작인 페이지 제공 - DHTML(Dynamic HTML)
+			// alert(document); // [object HTMLDocument]
+				//Document 객체를 기반으로 만들어진 객체들을 '엘리먼트 객체'라고 한다. - document 객체의 하위 객체 중요@@
+			
+		
+			// document.write(html) : HTML 태그를 전달받아 브라우저 응답영역에 출력하는 메소드
+			document.write("<p>write() 메소드를 호출하여 출력된 내용입니다.</p>")
+			
+		</script>
+</body>
+</html>

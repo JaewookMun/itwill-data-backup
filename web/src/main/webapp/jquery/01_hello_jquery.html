@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jQuery</title>
+<!-- script 태그를 이용하여 jQuery 라이브러리 파일을 웹문서에 포함해야만 jQuery 객체와 메소드 사용 -->
+<!-- => https://jquery.com 사이트 참조 -->
+	<!-- CDN을 이용할 수 없는 경우가 있기 때문에 직접 다운받는 경우도 존재. -->
+<!-- jQuery 라이브러리 파일을 다운로드 받아 현재 서버에 저장하여 포함 -->
+<!-- <script type="text/javascript" src="jquery-3.6.0.min.js"></script>  -->
+
+<!-- CDN 서버의 jQuery 라이브러리 파일을 제공받아 포함 -->
+<!-- => CDN(Contents Delivery Network) : 대용량의 컨텐츠를 빠르고 안정적으로 제공하는 서버 -->
+<!-- => 1.x 버전 : IE9 이하, 2.x or 3.x 버전 : IE 10 이상 -->
+<!-- 미압축파일(uncompressed) : 라이브러리 변경 가능, 압축파일(minified) : 라이브러리 변경 불가능 -->
+	<!-- CDN서버는 구글이나 마이크로소프트에서도 제공 -->
+	<!-- 아직 IE9를 사용하는 곳도 존재. 버전에 따라 라이브러리의 메소드에 차이가 크다. -->
+	<!-- 미압축파일은 엔터나 공백이 많으나 압축파일(compressed?)은 전혀 없다. - 미압축파일이 속도가 훨씬 빠르다. -->
+	<!-- 일반적으로 제작 후 압축해서 사용하는 경우가 많음. > 압축하면 변경이 거의 불가능하다. -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript">
+// jQuery는 CSS 선택자로 엘리먼트(태그)를 검색하여 jQuery 객체 생성 후 메소드를 호출하여 원하는 기능 구현
+// => DOM Tree(document 객체)가 생성된 후 jQuery 객체 사용 가능
+// 형식)jQuery(Selector|Object|Tag).메소드(값,값,값...)
+	//`선택자 or JS 객체 or 태그를 통해 jQuery 객체를 생성할 수 있다.
+
+/*
+// window 객체의 onload 이벤트 속성에 이벤트 처리 함수 등록 - DOM Tree 완성
+// => 가독성이 떨어지며 이벤트 처리 함수가 하나만 등록
+window.onload=function(){
+	alert("window.onload 이벤트에 대한 이벤트 처리 함수의 명령 실행-1");
+}
+	// winodw가 다 load 되었다는 것(onload)은 윈도우 관련해서 모든것이 완료되었다는 것을 의미(출력까지)
+
+window.onload=function(){ 
+	alert("window.onload 이벤트에 대한 이벤트 처리 함수의 명령 실행-2");
+}
+*/
+
+/*
+// jQuery(document).ready(callback) : document객체가 준비된 경우(DOM Tree 완성)
+// callback 함수의 명령을 실행하는 메소드
+// => 가독성이 좋으며 ready() 메소드를 여러번 호출 가능
+jQuery(document).ready(function(){
+	alert("document 객체가 준비되면 실행되는 명령-1")
+});
+
+jQuery(document).ready(function(){
+	alert("document 객체가 준비되면 실행되는 명령-2")
+});
+	// `DOM Tree가 완성되자마자 출력됨. - window에 출력되기 전에...
+*/
+
+
+/*
+// jQuery 함수명 대신 $ 기호를 사용하여 표현 가능
+	//jQuery() (제이쿼리 클래스함수)를 가지고 객체를 만들고 메소드를 사용한다고 생각 가능
+$(document).ready(function(){
+	$("p").css("color","red");
+});
+*/
+
+</script>
+	<!-- jQuery는 JS의 라이브러리이다. -->
+</head>
+<body>
+	<h1>jQuery 사용법</h1>
+	<hr>
+	<p>Hello, jQuery !!!</p>
+	<p>Hello, jQuery !!!</p>
+	<p>Hello, jQuery !!!</p>
+	
+	<script type="text/javascript">
+		// script 태그를 body의 마지막 자식태그로 선언하면 document 객체가 준비된 상태이므로
+		//jQuery(document).ready() 메소드를 호출하지 않아도 jQuery 객체 사용 가능
+		$("p").css("color", "green");
+		
+			// 굳이 객체를 생성해서 메소드를 호출하는 것보다 마지막에 필요한 메소드를 사용하는 것이 좀더 효율적이다.
+			// 공식 api 문서에서도 script를 맨 마지막에 작성(body 하단)
+			// css 선택자를 이용
+			// jQuery의 필요한 메소드만 짚고 넘어감.
+	</script>
+</body>
+</html>

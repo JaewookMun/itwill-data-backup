@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>JavaScript</title>
+</head>
+<body>
+	<h1>내장함수 - eval 함수</h1>
+	<hr>
+	<p>eval(string) : 문자값을 전달받아 자바스크립트 명령으로 변환하여 반환하는 함수</p>
+	
+	<script type="text/javascript">
+		var text="20 + 10";
+		//alert(text);
+		//alert(eval(text)); // alert(20+10);
+			//text에 저장된 문자값이 eval 함수에 의해서 JS 명령이 된다.
+		
+		//var operation=prompt("연산식을 입력해주세요.");
+		//alert("연산결과 = "+eval(operation));
+		
+		var fun="function() { alert('함수를 호출 하였습니다.'); }";
+		//alert(typeof(fun)); //자료형 : string
+		//fun(); // 함수형 변수가 아니므로 함수 호출 불가능 - 에러 발생
+	
+		// 함수 선언 형식의 문자값을 eval 함수로 전달받아 처리할 경우 익명함수는 미리 생성
+		//되도록 () 연산자에 결합하여 처리
+			// 자바스크립트 명령으로 변환하여 실행 함수(익명함수)는
+			// ()를 통해 미리 declaration 될수 있도록 해야한다.- 함수를 미리 만들고 호출하는 개념
+			// 익명함수의 경우 선언된 뒤 호출.
+		alert(typeof(eval("("+fun+")")));
+	</script>
+</body>
+</html>
+
+

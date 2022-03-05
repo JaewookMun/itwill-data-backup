@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>JavaScript</title>
+</head>
+<body>
+	<h1>BOM(Browser Object Model) - navigator 객체</h1>
+	<hr>
+	<p>navigator 객체 : 브라우저 엔진을 객체로 표현하여 프로퍼티와 메소드를 제공하는 객체</p>
+		<!-- 브라우저는 브라우저 엔진을 통해 구분한다. -->
+		<!-- 엔진이 같으면 디자인은 달라도 내부적으로 동일한 방식으로 웹문서를 처리한다. -->
+		<!-- 자바스크립트는 브라우저에 영향을 많이 받기 때문에 브라우저 종류를 구분하여 
+			 엔진에 맞추어 명령 작성 -->
+	
+	<script type="text/javascript">
+		// alert(navigator); //[object Navigator]
+		
+		// navigator.appName : 브라우저 엔진명을 저장한 프로퍼티
+		// alert("브라우저 엔진이름 = "+navigator.appName);
+		
+		// navigator.appVersion : 브라우저 엔진버전을 저장한 프로퍼티
+		// alert("브라우저 엔진버전 = "+navigator.appVersion);
+		
+		// navigator.userAgent : 브라우저 엔진이름과 버젼을 저장한 프로퍼티
+		alert("브라우저 엔진 = "+navigator.userAgent);
+		
+	</script>
+	
+</body>
+</html>

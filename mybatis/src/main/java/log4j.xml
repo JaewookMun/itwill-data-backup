@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+	<!-- 위의 DOCTYPE이 잘못되면 아래 configuration 이 자동완성이 안됨 -->
+	<!-- 위의 경로에 존재하는 것들만 사용가능. -->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%5p - %m%n"/>
+		</layout>
+	</appender>
+		<!-- 콘솔에 기록하도록 로깅환경설정. - 간단한 기록 - 스프링에서 좀 더 자세히 확인할 예정
+		로깅 구현체 생성. -->
+	<root>
+		<level value="DEBUG"/>
+		<appender-ref ref="console"/>
+	</root>
+</log4j:configuration>

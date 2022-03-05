@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>HTML</title>
+</head>
+<body>
+	<h1>video 태그</h1>
+	<hr>
+	<!-- video 태그 : 비디오 파일(mp4 파일, ogv, webm 파일 등)을 전송하여 재생하기 위한 태그 -->
+		<!-- 오디오,비디오는 압축기술에 따라 형태가 달라진다.(확장자) -->
+		<!-- 높이보다는 폭이 중요 (높이는 자동설정) -->	
+	<!--  
+	<video src="video/movie.mp4" controls="controls" width="650"></video>
+	-->
+	<!--  
+	<video src="video/movie.ogv" controls="controls" width="650"></video>
+	-->
+	<video controls="controls" width="650">
+			<!-- 브라우저 특징 때문에 재생이 안되는 것을 막기 위해
+			source 태그를 통해서 재생소스 추가.
+			아래 소스 : ogv가 안된다면 mp4 파일을 재생시켜라. -->
+		<source src="video/movie.ogv">
+		<source src="video/movie.mp4">
+	</video>
+	
+	
+</body>
+</html>

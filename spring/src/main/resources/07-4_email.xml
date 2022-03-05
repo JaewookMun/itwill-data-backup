@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 메일 전송 기능을 제공하는 JavaMailSenderImpl 클래스를 Spring Bean으로 등록 -->
+	<!-- => SMTP 서비스를 제공하는 메일서버의 정보를 JavaMailSenderImpl 클래스의 필드에 전달하여 저장(Injection) -->
+	<bean class="org.springframework.mail.javamail.JavaMailSenderImpl" id="javaMailSender">
+			<!-- host : SMTP 서비스를 제공하는 컴퓨터의 이름 -->
+		<property name="host" value="smtp.gmail.com"/>
+			<!-- 아이디와 비밀번호가 맞아도 보안상 허용되지 않은 경우 메일을 보낼 수 없다. -->
+			<!-- '보안 수준이 낮은 앱의 허용:'을 사용으로 바꾸어야함 -->
+			<!-- desktop application은 일반적으로 보안상 안전하지않은 어플리케이션으로 분류 -->
+		<property name="username" value="moonjaewook12@gmail.com"/>
+			<!-- username은 gmail 아이디를 의미한다. -->
+		<property name="password" value="besmartjw20"/>
+			<!-- smtp 서비스를 제공하는 컴퓨터에 접속하여 계정 정보로 인증을 받은 후 인증을 성공하면 메일 전송 -->
+			<!-- web 서비스를 제공하는 컴퓨터는 익명계정의 접근(Anonymous Access)을 허용하지만 일반적으로 서버컴퓨터들은 허용하지 않는다. -->	
+		<property name="port" value="587"/>
+		<property name="javaMailProperties">
+			<props>
+					<!-- 보안관련 내용 -->
+				<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.auth">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+			<!-- 
+				- https://getemailservices.com/gmail-imap-settings/
+				  or https://blog.jounsaram.net/?p=14
+				 => Gmail port No, username info.
+				 
+				- https://www.thefunky-monkey.com/page-364/google-smtp/
+				 => 보안 수준이 낮은 앱 허용 설정정보
+				    (https://www.google.com/settings/u/2/security/lesssecureapps) 
+			-->
+
+	<!-- 핵심관심모듈이 등록된 클래스를 Spring Bean으로 등록 -->
+	<!-- => mailSender 필드에 JavaMailSenderImpl 클래스의 Spring Bean으로 의존관계를 설정 -->
+	<bean class="xyz.itwill07.aop.EmailSendBean" id="emailSendBean">
+		<property name="mailSender" ref="javaMailSender"/>
+	</bean>
+		<!-- SMTP 서비스를 제공하는 컴퓨터가 필요 -->
+		<!-- 실제 메일은 JavaMailSenderImpl이 보내고 EmailSendBean은 수신인에 대한 정보를 제공한다. -->
+	
+	<!-- 횡단관심모듈이 등록된 클래스를 Spring Bean으로 등록 -->	
+	<bean class="xyz.itwill07.aop.EmailSendAdvice" id="emailSendAdvice"/>
+
+	<aop:config>
+		<aop:pointcut expression="execution(* sendEmail(..))" id="emailSendPoinCut"/>
+		<aop:aspect ref="emailSendAdvice">
+			<aop:before method="beforeMessage" pointcut-ref="emailSendPoinCut"/>
+			<aop:after-returning method="successMessage" pointcut-ref="emailSendPoinCut" returning="email"/>
+			<aop:after-throwing method="failMessage" pointcut-ref="emailSendPoinCut" throwing="exception"/>
+		</aop:aspect>
+	</aop:config>
+
+</beans>

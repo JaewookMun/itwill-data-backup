@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- 컨텍스트에 존재하는 모든 클래스(all front controller)에서 사용할 수 있도록 Spring Bean을 등록하는 Bean Configuration File -->
+	<!-- => DAO 클래스 작성에 필요한 클래스를 Spring Bean으로 등록 -->
+	<!-- => DataSource, SqlSessionFactory, SqlSession, TransactionManager 등 -->
+	
+	<!-- DataSource 관련 클래스를 Spring Bean으로 등록 -->
+	<!-- => Connection 객체를 생성하기 위한 정보를 필드에 인젝션 처리 -->
+	<!--  
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+		<property name="username" value="scott"/>
+		<property name="password" value="tiger"/>
+	</bean>
+	-->
+	
+	<!-- driverClassName 필드와 url 필드를 og4jdbc-log4j2-jdbc4 라이브러리에서 제공되는
+	값으로 인젝션 처리 -->
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
+		<property name="url" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:xe"/>
+		<property name="username" value="scott"/>
+		<property name="password" value="tiger"/>
+	</bean>
+		<!-- driver class name과 url protocol의 변경 - jdbc 뒤에 log4jdbc라는 서브프로토콜 추가 -->
+		<!-- mybatis는 Spring의 PreparedStatement를 활용 -->
+
+
+	<!-- SqlSessionFactory 관련 클래스를 Spring Bean으로 등록 -->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactoryBean">
+		<!-- configLocation 필드에는 Mybatis 환경설정 파일의 경로를 인젝션 처리 -->
+		<!-- SpringMVC에서 사용하는 Spring Container(WebApplicationContext 객체)는
+		[src/main/webapp] 폴더(/)의 자원에만 접근 가능 -->
+		<!-- [src/main/webapp] 또는 [src/main/resources] 폴더에 작성된 자원에 접근하기 위해서는 classpath 접두사 사용 -->
+		<!-- <property name="configLocation" value="/WEB-INF/spring/mybatis-config.xml"/> -->
+			<!-- 위처럼 spring 폴더에 접근하는 것이 정석이라 볼수 있음. -->
+			
+		<!-- 패키지에 자원이 작성된 경우 파일 시스템 경로로 표현 -->
+		<!-- <property name="configLocation" value="classpath:xyz/itwill/xml/mybatis-config.xml"/> -->
+		<property name="configLocation" value="classpath:mybatis-config.xml"/>
+			<!-- java 프로그램 리소스에 접근할 경우 classpath: 를 접두사로 사용한다. -->
+		
+		<!-- dataSource 필드에 DataSource 관련 Spring Bean을 인젝션 처리 -->	
+		<!-- => mybatis 환경설정파일의 environment 엘리먼트 생략 -->
+		<property name="dataSource" ref="dataSource"/>
+		
+		<!-- typeAliasesPackage 필드에 DTO 클래스를 작성하는 패키지를 인젝션 처리 -->
+		<!-- => mybatis 환경설정파일의 typeAliases 엘리먼트 생략 -->
+		<property name="typeAliasesPackage" value="xyz.itwill10.dto"/>
+		
+		<!-- mapperLocations 필드에 XML 맵퍼 파일을 List 객체의 요소로 인젝션 처리 -->
+		<!-- => * 기호를 사용하여 다수의 XML 파일을 맵퍼 파일로 등록 가능 -->
+		<!-- => mybatis 환경설정파일의 mappers 엘리먼트 생략 -->
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:xyz/itwill10/mapper/*.xml</value>
+			</list>
+		</property>	
+			<!-- mybatis-config에서 설정하지 않아도 여기서 관련 내용을 설정할 수 있다. -->
+	</bean>
+			<!-- WebApplicationContext는 웹관련 자원들을 읽어들일 수 있지만 src 쪽 자원을 읽어들일 수 없다. -->
+			<!-- WebApplicationContext 스프링 컨테이너는 웹 자원만 읽을 수 있기 때문에 spring 폴더에 만드는 것이 정석이다. -->
+	
+	<!-- SqlSession 관련 클래스를 Spring Bean으로 등록 -->
+	<!-- => destroy-method 속성에 clearCache 메소드를 속성값으로 설정 -->
+	<!-- clearCache 메소드 : sqlSession 객체를 소멸시키는 메소드 -->
+		<!-- 기본생성자가 없기 때문에 에러 발생 -->
+		<!-- destroy-method는 객체가 소멸되기전에 호출되는 메소드를 의미한다. -->
+		<!-- SqlSession객체를 관리해주는 클래스 -->
+	<bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSession" destroy-method="clearCache">
+		<!-- 생성자를 이용하여 SqlSessionFactoryBean 클래스의 Spring Bean을 인젝션 처리 -->
+		<constructor-arg ref="sqlSessionFactoryBean"/>
+			<!-- sqlsession을 만들기 위해서는 sqlSessionFactory가 필요하기 때문에... -->
+	</bean>
+	
+	<!-- TransactionManager 관련 클래스를 Spring Bean으로 등록 -->
+	<!-- beanName을 반드시 transactionManager로 설정 -->
+	<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+		<!-- dataSource 필드에 DataSource 관련 Spring Bean을 인젝션 처리 -->
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+		<!-- mybatis를 사용하기 위해서는 SqlSessionTemplate이 필요하다. -->
+		
+	<!-- annotation-driven : @Transactional 어노테이션을 이용하여 TransactionManager 관련
+	Spring Bean으로 트랜젝션 처리 기능을 제공하는 엘리먼트 -->
+		<!-- @Transatcional 어노테이션이 작동하기 위해 필요 txmanager 관련 기능을 위해. -->	
+	<tx:annotation-driven/>	
+</beans>

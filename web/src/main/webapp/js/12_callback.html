@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>JavaScript</title>
+</head>
+<body>
+	<h1>콜백함수(CallBack Function)</h1>
+	<hr>
+	<p>함수의 매개변수에 함수를 전달받아 저장하고 매개변수로 함수 내부에서 호출되어 실행되는 함수</p>
+	
+	<script type="text/javascript">
+		function display1(){
+			alert("display1 함수명으로 함수 호출");
+			
+		}	
+		
+		// 함수명은 함수를 구분하기 위한 식별자
+		// => 내부적으로 함수명은 변수(함수변수)로 함수는 값으로 처리
+			//함수명이 함수변수와 똑같은 취급 
+		//alert(typeof(display1)); // 자료형 : function
+		//alert(display1)
+		
+		// 함수명을 사용하여 함수 호출
+		//display1();
+		
+		//함수를 선언하여 변수에 저장 - 함수변수
+		var display2=function(){
+			alert("display2 변수에 저장된 함수 호출")
+		}
+		
+		//alert(typeof(display2)); // 자료형 : function
+		//alert(display2);
+		
+		// 함수변수를 사용하여 함수 호출
+		//display2();
+		
+		// 매개변수에 함수를 전달받아 저장 가능 - 매개변수 : 함수변수
+		function callback(call){
+			//alert(call);
+			
+			// 매개변수에 저장된 함수 호출 - 콜백함수
+			call();
+		}
+		
+			// 함수는 값으로 처리되기 때문에 함수는 매개변수값으로 저장
+		// callback(display1);
+		// callback(display2);
+			// 매개변수를 통해 함수를 전달받아 함수 안에서 함수를 실행할 수 있음.		
+		
+		// 함수의 매개변수에 익명함수를 직접 선언하여 전달
+		callback(function(){
+			alert("함수 호출")
+		});
+			// 이벤트 핸들러는 콜백함수로 처리되는 경우가 많다.
+	</script>
+</body>
+</html>

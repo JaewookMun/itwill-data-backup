@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>img 태그</h1>
+	<hr>
+	<!-- img 태그 : 이미지 출력 -->
+	<!-- => 이미지 파일 : GIF 파일, PNG 파일, JPEG(JPG) 파일 등 -->
+	<!-- alt 속성 : 이미지에 대한 설명을 속성값 설정 - 음성 지원 -->
+	<!-- src 속성 : 이미지 파일에 대한 URL 주소를 속성값으로 설정 -->
+	<!-- => URL 주소에 해당 이미지 파일이 없는 경우 404 상태코드(Not Found) 발생 -->
+		<!-- img 태그는 독립태그 - 종료태그가 없다. -->
+		<!-- 이미지파일 : 점으로 표현된 값들이 압축되어 표현되는 파일 
+		- 압축률에 따라 확장자가 다르다. from GIF to JPEG 압축률이 높아짐 -->
+		<!-- 자동완성시 입력되는 속성 : 필수 속성
+		alt 속성은 눈이 보이지 않는 분들을 위해 입력하는 속성이다. publishing 때문에 존재 -->
+		<!-- 외국에서는 publishing이 법적으로 엄격하기 때문에 굉장히 자세히 서술된다. -->
+	<img alt="다음" src="https://t1.daumcdn.net/daumtop_chanel/op/20200723055344399.png">
+	<hr>
+	<!-- 이미지의 폭을 변경하면 높이는 자동 변경 -->
+		<!-- 주의 : URL주소를 표현할 때 대소문자 구분 -->
+	<img alt="코알라" src="http://localhost:8000/web/html/images/Koala.jpg" width="200">
+	
+	<!-- HTML 문서와 같은 서버에 존재하는 리소스인 경우 URL 주소에서 서버관련 정보 (프로토콜
+	, 서버명, 포트)를 생략하여 표현 가능  -->
+	<!-- 절대경로 표현방법 : 서버의 최상위 디렉토리(Root Directory)를 기준으로 리소스
+	경로를 표현하는 방법 -->
+		<!-- 이미지태그는 인라인 태그이기 때문에 이어서 표기하면 옆으로 출력된다. -->
+	<img alt="코알라" src="/web/html/images/Koala.jpg" width="200">
+	
+	<!-- 상대경로 표현방법 : 현재 요청문서가 위치한 디렉토리를 기준으로 리소스 경로를
+	표현하는 방법 => 디렉토리 : 하위 디렉토리, .. : 상위 디렉토리 -->
+		<!-- 현재문서(02_img.html)의 위치를 기준 -->
+	<img alt="코알라" src="images/Koala.jpg" width="200">
+	<hr>
+		<!-- 절대경로와 상대경로 예시 - 현재위치 [./]는 통상 생략하여 표현하지 않는다. -->
+	<img alt="펭귄" src="/web/html/Penguins.jpg" width="200">
+	<img alt="펭귄" src="Penguins.jpg" width="200">
+		<!-- / : 서버 루트 , webapp : context 루트 -->
+	<hr>
+	<img alt="튤립" src="/web/Tulips.jpg" width="200">
+	<img alt="튤립" src="../Tulips.jpg" width="200">
+	
+		<!-- 서버루트를 기준으로 절대경로 사용을 권장 (나중에 404 Error를 막기 위해서)
+		=> MVC 디자인 패턴을 배울 때 처리 프로그램이 달라지므로 상대경로를 사용할 경우 결과가 이상해짐. -->
+	
+	
+</body>
+</html>
